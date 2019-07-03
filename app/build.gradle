@@ -1,0 +1,64 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.agladkov.dotabook"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+androidExtensions {
+    experimental = true
+}
+
+dependencies {
+    implementation project(':domain')
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    def coroutinesVersion = '1.3.0-M1'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.core:core-ktx:1.0.2'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+
+    // Glide
+    def glideVersion = '4.9.0'
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
+
+    // Navigation
+    def navigationVersion = '1.0.0'
+    implementation "android.arch.navigation:navigation-fragment:$navigationVersion"
+    implementation "android.arch.navigation:navigation-ui:$navigationVersion"
+    implementation "android.arch.navigation:navigation-ui-ktx:$navigationVersion"
+
+    // UI
+    def circularProgress = '2.0.0'
+    implementation "com.mikhaellopez:circularprogressbar:$circularProgress"
+
+    // Test
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+}
