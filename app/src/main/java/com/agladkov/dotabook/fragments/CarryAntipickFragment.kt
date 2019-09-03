@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.agladkov.domain.models.Hero
 import com.agladkov.dotabook.R
+import kotlinx.android.synthetic.main.fragment_carry_antipick.*
 
 class CarryAntipickFragment : Fragment() {
 
@@ -33,5 +34,7 @@ class CarryAntipickFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_carry_antipick, container, false)
     }
 
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    }
 }
