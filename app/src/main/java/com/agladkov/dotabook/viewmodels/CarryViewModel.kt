@@ -22,22 +22,34 @@ class CarryViewModel(val repository: CarryRepository) : LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun fetchCarries() {
         state.set(newValue = State.LoadingState())
-        GlobalScope.launch(Dispatchers.IO) {
-            try {
-                val heroes = repository.fetchCarries().await()
-                if (heroes.isEmpty()) {
-                    withContext(Dispatchers.Main) {
-                        state.set(newValue = State.NoItemsState())
-                    }
-                } else {
-                    withContext(Dispatchers.Main) {
-                        state.set(newValue = State.LoadedState(data = heroes))
-                    }
+        CoroutineScope(Dispatchers.IO).launch {
+            val heroes = repository.fetchLocalCarries().await()
+            if (heroes.isEmpty()) {
+                launch(Dispatchers.Main) {
+                    state.set(newValue = State.NoItemsState())
                 }
-            } catch (e: Exception) {
-                Log.e(TAG, "error ${e.localizedMessage}")
-                e.printStackTrace()
+            } else {
+                launch(Dispatchers.Main) {
+                    state.set(newValue = State.LoadedState(data = heroes))
+                }
             }
         }
+//        GlobalScope.launch(Dispatchers.IO) {
+//            try {
+//                val heroes = repository.fetchCarries().await()
+//                if (heroes.isEmpty()) {
+//                    withContext(Dispatchers.Main) {
+//                        state.set(newValue = State.NoItemsState())
+//                    }
+//                } else {
+//                    withContext(Dispatchers.Main) {
+//                        state.set(newValue = State.LoadedState(data = heroes))
+//                    }
+//                }
+//            } catch (e: Exception) {
+//                Log.e(TAG, "error ${e.localizedMessage}")
+//                e.printStackTrace()
+//            }
+//        }
     }
 }

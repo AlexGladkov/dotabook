@@ -8,4 +8,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="carry_title">Выберите керри</string>
     <string name="carry_not_found">No heroes found</string>
+    <string name="carry_antipick">Antipick</string>
 </resources>
