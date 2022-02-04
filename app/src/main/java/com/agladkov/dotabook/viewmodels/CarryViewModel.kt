@@ -1,29 +1,23 @@
 package com.agladkov.dotabook.viewmodels
 
-import android.util.Log
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.OnLifecycleEvent
-import com.agladkov.domain.CarryRepository
-import com.agladkov.domain.models.Hero
-import com.agladkov.dotabook.extensions.default
+import androidx.lifecycle.*
+import com.agladkov.dotabook.domain.implementations.CarryRepository
 import com.agladkov.dotabook.extensions.set
 import com.agladkov.dotabook.helpers.State
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import java.lang.Exception
+import javax.inject.Inject
 
-class CarryViewModel(val repository: CarryRepository) : LifecycleObserver {
-    private val TAG = CarryViewModel::class.java.simpleName
+@HiltViewModel
+class CarryViewModel @Inject constructor(val repository: CarryRepository) : ViewModel() {
+    val state: MutableLiveData<State> = MutableLiveData<State>(State.LoadingState())
 
-    val state: MutableLiveData<State> = MutableLiveData<State>().default(initialValue = State.LoadingState())
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun fetchCarries() {
         state.set(newValue = State.LoadingState())
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch {
             try {
-                val heroes = repository.fetchCarries().await()
+                val heroes = repository.fetchCarries()
                 if (heroes.isEmpty()) {
                     withContext(Dispatchers.Main) {
                         state.set(newValue = State.NoItemsState())
@@ -34,7 +28,6 @@ class CarryViewModel(val repository: CarryRepository) : LifecycleObserver {
                     }
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "error ${e.localizedMessage}")
                 e.printStackTrace()
             }
         }

@@ -4,7 +4,7 @@
             xmlns:tools="http://schemas.android.com/tools" android:id="@+id/navigation_graph"
             app:startDestination="@id/carryFragment">
 
-    <fragment android:id="@+id/carryFragment" android:name="com.agladkov.dotabook.fragments.CarryFragment"
+    <fragment android:id="@+id/carryFragment" android:name="com.agladkov.dotabook.screens.CarryFragment"
               android:label="fragment_carry" tools:layout="@layout/fragment_carry">
         <action android:id="@+id/action_carryFragment_to_carryAntipickFragment"
                 app:destination="@id/carryAntipickFragment"
@@ -13,11 +13,11 @@
                 app:exitAnim="@anim/nav_default_exit_anim" app:popEnterAnim="@anim/nav_default_pop_enter_anim"
                 app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     </fragment>
-    <fragment android:id="@+id/supportFragment" android:name="com.agladkov.dotabook.fragments.SupportFragment"
+    <fragment android:id="@+id/supportFragment" android:name="com.agladkov.dotabook.screens.SupportFragment"
               android:label="fragment_support" tools:layout="@layout/fragment_support"/>
-    <fragment android:id="@+id/settingsFragment" android:name="com.agladkov.dotabook.fragments.SettingsFragment"
+    <fragment android:id="@+id/settingsFragment" android:name="com.agladkov.dotabook.screens.SettingsFragment"
               android:label="fragment_settings" tools:layout="@layout/fragment_settings"/>
     <fragment android:id="@+id/carryAntipickFragment"
-              android:name="com.agladkov.dotabook.fragments.CarryAntipickFragment"
+              android:name="com.agladkov.dotabook.screens.CarryAntipickFragment"
               android:label="fragment_carry_antipick" tools:layout="@layout/fragment_carry_antipick"/>
 </navigation>

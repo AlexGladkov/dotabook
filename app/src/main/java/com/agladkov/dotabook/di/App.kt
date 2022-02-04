@@ -1,16 +1,8 @@
 package com.agladkov.dotabook.di
 
 import android.app.Application
-import com.agladkov.core.storage.RoomAppDatabase
+import com.agladkov.dotabook.data.storage.RoomAppDatabase
+import dagger.hilt.android.HiltAndroidApp
 
-class App: Application() {
-
-    companion object {
-        lateinit var roomAppDatabase: RoomAppDatabase
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-        roomAppDatabase = RoomAppDatabase.buildDataSource(context = applicationContext)
-    }
-}
+@HiltAndroidApp
+class App: Application()
