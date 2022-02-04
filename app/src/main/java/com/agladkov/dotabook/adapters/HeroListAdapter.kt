@@ -6,22 +6,31 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
 import androidx.recyclerview.widget.RecyclerView
+import coil.compose.rememberImagePainter
 import com.agladkov.domain.models.Hero
 import com.agladkov.dotabook.R
-import com.bumptech.glide.Glide
 
 interface HeroClickHandler {
     fun onItemClick(item: Hero)
 }
 
-class HeroListAdapter : RecyclerView.Adapter<HeroListAdapter.HeroListViewHolder>(), AdapterData<Hero> {
+class HeroListAdapter : RecyclerView.Adapter<HeroListAdapter.HeroListViewHolder>(),
+    AdapterData<Hero> {
     private val data: MutableList<Hero> = ArrayList()
     private var heroClickHandler: HeroClickHandler? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HeroListViewHolder {
-        return HeroListViewHolder(itemView = LayoutInflater.from(parent.context).inflate(R.layout.cell_hero_list, parent, false),
-            heroClickHandler = heroClickHandler)
+        return HeroListViewHolder(
+            itemView = LayoutInflater.from(parent.context).inflate(
+                R.layout.cell_hero_list, parent, false
+            ), heroClickHandler = heroClickHandler
+        )
     }
 
     override fun getItemCount(): Int {
@@ -42,19 +51,21 @@ class HeroListAdapter : RecyclerView.Adapter<HeroListAdapter.HeroListViewHolder>
         this.heroClickHandler = heroClickHandler
     }
 
-    class HeroListViewHolder(itemView: View, private val heroClickHandler: HeroClickHandler?) : RecyclerView.ViewHolder(itemView) {
-        private val imgAvatar = itemView.findViewById<ImageView>(R.id.heroImage)
-        private val cellView = itemView.findViewById<FrameLayout>(R.id.flHeroItem)
+    class HeroListViewHolder(itemView: View, private val heroClickHandler: HeroClickHandler?) :
+        RecyclerView.ViewHolder(itemView) {
+        private val composeView = itemView as ComposeView
 
         fun bind(source: Hero) {
-            cellView.setOnClickListener {
-                heroClickHandler?.onItemClick(item = source)
+            composeView.setContent {
+                Box(modifier = Modifier.clickable {
+                    heroClickHandler?.onItemClick(source)
+                }) {
+                    Image(
+                        painter = rememberImagePainter(source.avatar),
+                        contentDescription = source.name
+                    )
+                }
             }
-
-            Glide.with(itemView.context)
-                .load(source.avatar)
-                .fitCenter()
-                .into(imgAvatar)
         }
     }
 }

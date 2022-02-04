@@ -7,18 +7,9 @@ import kotlinx.serialization.json.Json
 
 @Serializable
 data class HeroApi(val id: Int, val name: String, val localized_name: String, val primary_attr: String,
-                   val attack_type: String, val roles: List<String>, val legs: Int) {
-
-    companion object  {
-        @UnstableDefault
-        fun toObject(stringValue: String): HeroApi {
-            return Json.nonstrict.parse(serializer(), stringValue)
-        }
-    }
-}
+                   val attack_type: String, val roles: List<String>, val legs: Int)
 
 // Extension for serialization
-@UnstableDefault
 fun HeroApi.toJson(): String {
-    return Json.stringify(HeroApi.serializer(), this)
+    return Json.encodeToString(this)
 }

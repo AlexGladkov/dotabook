@@ -4,26 +4,55 @@ import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
-import androidx.navigation.Navigation.findNavController
-import androidx.navigation.ui.setupWithNavController
-import com.agladkov.dotabook.R
-import kotlinx.android.synthetic.main.activity_main.*
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.agladkov.dotabook.fragments.CarryScreen
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
 
+    @OptIn(ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        setupNavigation()
-    }
+        setContent {
+            val tabs = listOf("Home", "Dashboard", "Notifications")
+            var currentTab by remember { mutableStateOf(tabs.first()) }
 
-    override fun onSupportNavigateUp(): Boolean {
-        return findNavController(this@MainActivity, R.id.navHostMain).navigateUp()
-    }
+            Column(modifier = Modifier.fillMaxSize()) {
+                Box(modifier = Modifier.weight(1f)) {
+                    when (currentTab) {
+//                        "Home" -> CarryScreen(viewModel = , navController = )
+                        else -> Text(currentTab)
+                    }
+                }
 
-    // MARK: - Internal logic
-    private fun setupNavigation() {
-        val navController = findNavController(this@MainActivity, R.id.navHostMain)
-        bottomNavigation.setupWithNavController(navController)
+                BottomNavigation(
+                    backgroundColor = Color.White
+                ) {
+                    tabs.forEach { value ->
+                        val isSelected = value == currentTab
+                        BottomNavigationItem(selected = isSelected, onClick = {
+                            currentTab = value
+                        }, icon = {
+
+                        }, label = {
+                            Text(value, color = if (isSelected) Color.Black else Color.LightGray)
+                        })
+                    }
+                }
+            }
+        }
     }
 }

@@ -13,7 +13,6 @@ import com.agladkov.dotabook.helpers.State
 import kotlinx.coroutines.*
 import java.lang.Exception
 
-
 class CarryViewModel(val repository: CarryRepository) : LifecycleObserver {
     private val TAG = CarryViewModel::class.java.simpleName
 
@@ -23,33 +22,21 @@ class CarryViewModel(val repository: CarryRepository) : LifecycleObserver {
     fun fetchCarries() {
         state.set(newValue = State.LoadingState())
         CoroutineScope(Dispatchers.IO).launch {
-            val heroes = repository.fetchLocalCarries().await()
-            if (heroes.isEmpty()) {
-                launch(Dispatchers.Main) {
-                    state.set(newValue = State.NoItemsState())
+            try {
+                val heroes = repository.fetchCarries().await()
+                if (heroes.isEmpty()) {
+                    withContext(Dispatchers.Main) {
+                        state.set(newValue = State.NoItemsState())
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        state.set(newValue = State.LoadedState(data = heroes))
+                    }
                 }
-            } else {
-                launch(Dispatchers.Main) {
-                    state.set(newValue = State.LoadedState(data = heroes))
-                }
+            } catch (e: Exception) {
+                Log.e(TAG, "error ${e.localizedMessage}")
+                e.printStackTrace()
             }
         }
-//        GlobalScope.launch(Dispatchers.IO) {
-//            try {
-//                val heroes = repository.fetchCarries().await()
-//                if (heroes.isEmpty()) {
-//                    withContext(Dispatchers.Main) {
-//                        state.set(newValue = State.NoItemsState())
-//                    }
-//                } else {
-//                    withContext(Dispatchers.Main) {
-//                        state.set(newValue = State.LoadedState(data = heroes))
-//                    }
-//                }
-//            } catch (e: Exception) {
-//                Log.e(TAG, "error ${e.localizedMessage}")
-//                e.printStackTrace()
-//            }
-//        }
     }
 }

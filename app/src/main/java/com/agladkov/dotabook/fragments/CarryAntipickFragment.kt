@@ -6,11 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import com.agladkov.domain.models.Hero
 import com.agladkov.dotabook.R
 import com.agladkov.dotabook.helpers.Keys
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.fragment_carry_antipick.*
 
 class CarryAntipickFragment : Fragment() {
 
@@ -38,11 +39,17 @@ class CarryAntipickFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        configureView()
+        configureView(view)
     }
 
     /// Internal logic
-    private fun configureView() {
+    private fun configureView(rootView: View) {
+        val txtCarryAntipickHeroName =
+            rootView.findViewById<TextView>(R.id.txtCarryAntipickHeroName)
+        val txtCarryAntipickHeroRole =
+            rootView.findViewById<TextView>(R.id.txtCarryAntipickHeroRole)
+        val imgCarryAntipickAvatar = rootView.findViewById<ImageView>(R.id.imgCarryAntipickAvatar)
+
         heroArgs?.let { hero ->
             txtCarryAntipickHeroName.text = hero.name
                 .replace("npc_dota_hero_", "")
